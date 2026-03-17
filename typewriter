@@ -1,0 +1,96 @@
+#!/usr/bin/env php
+
+<?php
+
+$autoload = $GLOBALS['_composer_autoload_path'] ?? 'vendor'.DIRECTORY_SEPARATOR.'autoload.php';
+
+if (file_exists($autoload)) {
+    require $autoload;
+} else {
+    fwrite(STDERR, "\e[33mError: Could not find vendor/autoload.php.\e[0m".PHP_EOL);
+    exit(1);
+}
+
+use Plmrlnsnts\Typewriter\Entrypoint;
+use Plmrlnsnts\Typewriter\SharedDirectory;
+use Plmrlnsnts\Typewriter\Typewriter;
+
+$argv = $_SERVER['argv'] ?? [];
+
+define('TYPEWRITER_JSON', getcwd().DIRECTORY_SEPARATOR.'typewriter.json');
+define('TYPEWRITER_TEMPLATE', __DIR__.DIRECTORY_SEPARATOR.'template.json');
+define('TYPEWRITER_ROOT', dirname(TYPEWRITER_JSON));
+
+if (isset($argv[1]) && $argv[1] === 'init') {
+    if (file_exists(TYPEWRITER_JSON)) {
+        fwrite(STDERR, "\e[33mTypewriter has already been configured for this project.\e[0m".PHP_EOL);
+        fwrite(STDERR, "\e[90mEdit the typewriter.json file to customize the installation.\e[0m".PHP_EOL);
+        exit(1);
+    }
+
+    $template = file_get_contents(TYPEWRITER_TEMPLATE);
+    file_put_contents(TYPEWRITER_JSON, $template);
+    fwrite(STDOUT, "\e[32mTypewriter initialized.\e[0m".PHP_EOL);
+    fwrite(STDOUT, "\e[90mEdit the typewriter.json file to customize the installation.\e[0m".PHP_EOL);
+    exit(0);
+}
+
+if (! file_exists(TYPEWRITER_JSON)) {
+    fwrite(STDERR, "\e[33mCould not find a typewriter.json configuration file.\e[0m".PHP_EOL);
+    fwrite(STDERR, "\e[90mRun 'vendor/bin/typewriter init' to generate a new one.\e[0m".PHP_EOL);
+    exit(1);
+}
+
+$config = json_decode(file_get_contents(TYPEWRITER_JSON), true);
+
+if ($config === null) {
+    fwrite(STDERR, "\e[33mInvalid typewriter.json.\e[0m".PHP_EOL);
+    exit(1);
+}
+
+$schemas = [];
+
+if (isset($config['schemas']) && is_array($config['schemas'])) {
+    $schemas = $config['schemas'];
+} else {
+    $schemas[] = $config;
+}
+
+foreach ($schemas as $schema) {
+    $typewriter = new Typewriter(
+        source: resolve_path($schema['source']),
+        enums: new SharedDirectory(
+            resolve_path($schema['enums']['directory']),
+            $schema['enums']['namespace']
+        ),
+        inputs: new SharedDirectory(
+            resolve_path($schema['inputs']['directory']),
+            $schema['inputs']['namespace']
+        ),
+        typeClass: $schema['type'] ?? 'Plmrlnsnts\\Typewriter\\Type',
+    );
+
+    foreach ($schema['entrypoints'] as $entry) {
+        $typewriter->addEntrypoint(new Entrypoint(
+            input: resolve_path($entry['input']),
+            output: resolve_path($entry['output']),
+            namespace: $entry['namespace']
+        ));
+    }
+
+    if (isset($schema['casts']) && is_array($schema['casts'])) {
+        foreach ($schema['casts'] as $graphqlType => $phpType) {
+            $typewriter->addCast($graphqlType, $phpType);
+        }
+    }
+
+    $typewriter->generate();
+}
+
+fwrite(STDOUT, "\e[32m✓\e[0m Done".PHP_EOL);
+
+function resolve_path(?string $path): ?string
+{
+    return realpath(TYPEWRITER_ROOT.DIRECTORY_SEPARATOR.$path)
+        ?: TYPEWRITER_ROOT.DIRECTORY_SEPARATOR.$path;
+}

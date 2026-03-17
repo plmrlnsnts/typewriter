@@ -1,0 +1,22 @@
+{
+    "schemas": [
+        {
+            "source": "schema.json",
+            "enums": {
+                "directory": "app/Graphql/Enums",
+                "namespace": "App\\Graphql\\Enums"
+            },
+            "inputs": {
+                "directory": "app/Graphql/Inputs",
+                "namespace": "App\\Graphql\\Inputs"
+            },
+            "entrypoints": [
+                {
+                    "input": "app",
+                    "output": "app/Graphql/Data",
+                    "namespace": "App\\Graphql\\Data"
+                }
+            ]
+        }
+    ]
+}
