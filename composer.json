@@ -1,7 +1,7 @@
 {
     "name": "plmrlnsnts/typewriter",
     "description": "A tool for generating PHP code based on a GraphQL schema and GraphQL operations.",
-    "version": "0.0.1",
+    "license": "MIT",
     "type": "library",
     "autoload": {
         "files": [
