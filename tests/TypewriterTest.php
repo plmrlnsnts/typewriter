@@ -1,5 +1,8 @@
 <?php
 
+namespace Plmrlnsnts\Typewriter\Tests;
+
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Plmrlnsnts\Typewriter\Entrypoint;
 use Plmrlnsnts\Typewriter\Filesystem;
@@ -42,6 +45,7 @@ class TypewriterTest extends TestCase
         return __DIR__.'/snapshots';
     }
 
+    #[Group('local')]
     public function test_it_can_generate_files(): void
     {
         $this->typewriter->generate();
@@ -49,7 +53,7 @@ class TypewriterTest extends TestCase
         $files = (new LocalFilesystem)->scan(__DIR__.'/generated', pattern: '/.php$/i');
 
         foreach ($files as $file) {
-            $this->assertMatchesFileHashSnapshot($file->getRealPath());
+            $this->assertMatchesFileHashSnapshot($file->getPathname(), $file->getFilename());
         }
     }
 
