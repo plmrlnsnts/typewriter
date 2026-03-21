@@ -82,13 +82,11 @@ Add a `casts` object inside your schema configuration, where each key is a Graph
 
 ### Extending Types
 
-You can customize the base class that all generated types will extend by specifying the `type` option in your schema configuration. By default, generated classes extend the built-in `Plmrlnsnts\Typewriter\Type`, but you may want to use your own base class to add shared methods, interfaces, or logic to all generated types.
-
-Add a `type` property to your schema configuration with the fully qualified class name of your custom base type.
+You can customize the base class that all generated types will extend by specifying the `type` option in your schema configuration. By default, generated classes extend the built-in `Plmrlnsnts\Typewriter\Type`, but you may want to use your own. For example, using the [spatie/laravel-data](https://github.com/spatie/laravel-data) package:
 
 ```json
 {
-  "type": "App\\Graphql\\Type"
+  "type": "Spatie\\LaravelData\\Data"
 }
 ```
 
