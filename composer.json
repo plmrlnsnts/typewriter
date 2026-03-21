@@ -26,12 +26,14 @@
         "typewriter"
     ],
     "require-dev": {
-        "phpunit/phpunit": "^13.0",
-        "spatie/phpunit-snapshot-assertions": "^5.3"
+        "phpunit/phpunit": "^12.5.12",
+        "spatie/phpunit-snapshot-assertions": "^5.3",
+        "laravel/pint": "^1.29"
     },
     "require": {
-        "php": ">=8.4.1",
+        "php": "^8.3",
         "nette/php-generator": "^4.2",
-        "webonyx/graphql-php": "^15.30"
+        "webonyx/graphql-php": "^15.30",
+        "polyfills/array-first-array-last": "^1.0"
     }
 }
