@@ -65,7 +65,7 @@ class Typewriter
             $stream = $this->process($source);
 
             foreach ($stream as $output) {
-                Filesystem::store($output->path, $output->render());
+                Filesystem::store($output->path, (string) $output);
             }
         }
     }

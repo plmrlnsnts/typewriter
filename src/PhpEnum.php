@@ -16,7 +16,7 @@ class PhpEnum extends PhpFile
         //
     }
 
-    public function render(): string
+    public function build(): PhpNamespace
     {
         $namespace = new PhpNamespace($this->namespace);
         $enum = $namespace->addEnum($this->name);
@@ -34,6 +34,6 @@ class PhpEnum extends PhpFile
             }
         }
 
-        return (string) '<?php'.PHP_EOL.PHP_EOL.$namespace;
+        return $namespace;
     }
 }

@@ -17,7 +17,7 @@ class PhpClass extends PhpFile
         //
     }
 
-    public function render(): string
+    public function build(): PhpNamespace
     {
         $namespace = new PhpNamespace($this->namespace);
         $class = $namespace->addClass($this->name);
@@ -43,7 +43,7 @@ class PhpClass extends PhpFile
 
             if ($property->list) {
                 $comments[] = "@param list<{$type}> \${$property->name} {$property->description}";
-            } else if ($property->description) {
+            } elseif ($property->description) {
                 $comments[] = "@param {$type} \${$property->name} {$property->description}";
             }
 
@@ -57,6 +57,6 @@ class PhpClass extends PhpFile
             $constructor->setComment(implode(PHP_EOL, $comments));
         }
 
-        return (string) '<?php'.PHP_EOL.PHP_EOL.$namespace;
+        return $namespace;
     }
 }
