@@ -13,6 +13,7 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "Plmrlnsnts\\Typewriter\\Tests\\": "tests/",
             "Plmrlnsnts\\TypewriterApp\\": "tests/generated/"
         }
     },
@@ -33,7 +34,6 @@
     "require": {
         "php": "^8.3",
         "nette/php-generator": "^4.2",
-        "webonyx/graphql-php": "^15.30",
-        "polyfills/array-first-array-last": "^1.0"
+        "webonyx/graphql-php": "^15.30"
     }
 }
