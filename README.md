@@ -90,6 +90,16 @@ You can customize the base class that all generated types will extend by specify
 }
 ```
 
+### Downloading schema.json
+
+To generate a `schema.json` from your GraphQL endpoint, you can use [get-graphql-schema](https://github.com/prisma-labs/get-graphql-schema) or similar tools.
+
+```bash
+npm install -g get-graphql-schema
+
+get-graphql-schema https://your.graphql.endpoint > schema.json
+```
+
 ## Author
 
 Paul Santos
